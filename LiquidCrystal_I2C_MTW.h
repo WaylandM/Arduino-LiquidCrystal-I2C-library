@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 #include <Print.h>
+#include <Wire.h>
 
 // commands
 #define LCD_CLEARDISPLAY 0x01
@@ -68,7 +69,7 @@ public:
 	 * @param lcd_rows	Number of rows your LCD display has.
 	 * @param charsize	The size in dots that the display has, use LCD_5x10DOTS or LCD_5x8DOTS.
 	 */
-	LiquidCrystal_I2C_MTW(uint8_t lcd_addr, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize = LCD_5x8DOTS);
+	LiquidCrystal_I2C_MTW(TwoWire &wirePort, uint8_t lcd_addr, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize = LCD_5x8DOTS);
 
 	/**
 	 * Set the LCD display in the correct begin state, must be called before anything else is done.
