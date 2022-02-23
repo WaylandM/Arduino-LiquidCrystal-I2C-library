@@ -22,8 +22,9 @@
 // can't assume that its in that state when a sketch starts (and the
 // LiquidCrystal constructor is called).
 
-LiquidCrystal_I2C_MTW::LiquidCrystal_I2C_MTW(uint8_t lcd_addr, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize)
+LiquidCrystal_I2C_MTW::LiquidCrystal_I2C_MTW(TwoWire &wirePort, uint8_t lcd_addr, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t charsize)
 {
+	_i2cPort = &wirePort;
 	_addr = lcd_addr;
 	_cols = lcd_cols;
 	_rows = lcd_rows;
@@ -32,7 +33,8 @@ LiquidCrystal_I2C_MTW::LiquidCrystal_I2C_MTW(uint8_t lcd_addr, uint8_t lcd_cols,
 }
 
 void LiquidCrystal_I2C_MTW::begin() {
-	Wire.begin();
+	//Wire.begin();
+	_i2cPort -> begin();
 	_displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
 
 	if (_rows > 1) {
@@ -225,9 +227,12 @@ void LiquidCrystal_I2C_MTW::write4bits(uint8_t value) {
 }
 
 void LiquidCrystal_I2C_MTW::expanderWrite(uint8_t _data){
-	Wire.beginTransmission(_addr);
-	Wire.write((int)(_data) | _backlightval);
-	Wire.endTransmission();
+	//Wire.beginTransmission(_addr);
+	//Wire.write((int)(_data) | _backlightval);
+	//Wire.endTransmission();
+	_i2cPort -> beginTransmission(_addr);
+	_i2cPort -> write((int)(_data) | _backlightval);
+	_i2cPort -> endTransmission();
 }
 
 void LiquidCrystal_I2C_MTW::pulseEnable(uint8_t _data){
